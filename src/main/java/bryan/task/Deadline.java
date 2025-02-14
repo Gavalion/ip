@@ -14,11 +14,28 @@ public class Deadline extends Task {
         }
         this.description = descriptionArray[0];
         this.by = descriptionArray[1];
-        if (this.by.isBlank() || this.description.isBlank()){
+        if (this.by.isBlank() || this.description.isBlank()) {
             throw new EmptyDeadlineDescription();
         }
         System.out.println("got it task added");
         System.out.println(this);
+    }
+
+    public Deadline(String description, boolean printMessage) throws InvalidDeadlineFormatException, EmptyDeadlineDescription {
+        super(description);
+        String[] descriptionArray = description.split(" /by ");
+        if (descriptionArray.length != 2) {
+            throw new InvalidDeadlineFormatException();
+        }
+        this.description = descriptionArray[0];
+        this.by = descriptionArray[1];
+        if (this.by.isBlank() || this.description.isBlank()) {
+            throw new EmptyDeadlineDescription();
+        }
+        if (printMessage) {
+            System.out.println("got it task added");
+            System.out.println(this);
+        }
     }
 
     public String getBy() {
@@ -32,6 +49,10 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by " + getBy() + ")";
-//        return "description: "+super.getDescription() +"\n" +" " + ((isDone) ? "yes": "no") +"\n";
+    }
+
+    @Override
+    public String convertToTxtFormat() {
+        return "D # " + super.convertToTxtFormat() + " # " + this.getBy();
     }
 }

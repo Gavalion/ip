@@ -5,34 +5,108 @@ import bryan.task.Deadline;
 import bryan.task.Event;
 import bryan.task.Task;
 import bryan.task.Todo;
+import com.sun.source.tree.ReturnTree;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Bryan {
-    public static String[] commandArray = {"todo", "list", "deadline", "mark", "unmark", "event", "bye"};
-    public Task[] taskArray = new Task[100];
+    public static String[] commandArray = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete"};
+    public static String filePath = "data1/bryan1.txt"; //change to data/bryan.txt for real test
+
+
+    public static Task stringToTask(String input) throws MarkingException, EmptyEventDescription, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidTodoFormatException, EmptyDeadlineDescription, InvalidTextFormatException {
+        String[] parsedInput = input.split(" # ");
+        Task t;
+        if (parsedInput[0].equals("T")) {
+            t = new Todo(parsedInput[2], false);
+        } else if (parsedInput[0].equals("D")) {
+            t = new Deadline(parsedInput[2] + " /by " + parsedInput[3], false);
+        } else if (parsedInput[0].equals("E")) {
+            t = new Event(parsedInput[2] + " /from " + parsedInput[3].split("-")[0] + " /to " + parsedInput[3].split("-")[1], false);
+        } else {
+            throw new InvalidTextFormatException();
+        }
+        t.setDone((parsedInput[1].equals("1") ? true : false));
+        return t;
+    }
+
+    public static ArrayList<Task> readFile() throws FileNotFoundException, InvalidTextFormatException {
+        ArrayList<Task> taskArray = new ArrayList<>();
+        File f = new File(filePath);
+        Scanner s = new Scanner(f);
+        while (s.hasNextLine()) {
+            try {
+                taskArray.add(stringToTask(s.nextLine()));
+            } catch (MarkingException | EmptyEventDescription | InvalidTextFormatException |
+                     InvalidTodoFormatException |
+                     InvalidEventFormatException | InvalidDeadlineFormatException | EmptyDeadlineDescription e) {
+                throw new InvalidTextFormatException();
+            }
+        }
+
+        return taskArray;
+    }
+
 
     public static void main(String[] args) {
+
+//        System.out.println("full path: " + f.getAbsolutePath());
         printBryanLogo();
         printLine();
         Scanner userInput = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("how can I help you?");
         String userString;
-        Task[] taskArray = new Task[100];
-        int counter = 0;
+        ArrayList<Task> taskArray = new ArrayList<>();
+        try {
+            taskArray = readFile();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            System.out.println("please check the txt file, it should be bryan.txt under the \"data\" folder");
+            File directory = new File("data1");
+            boolean directoryCreated = directory.mkdir();
+            if (directoryCreated) {
+                System.out.println("Directory created");
+            } else {
+                System.out.println("Failed to create directory. It may already exist");
+            }
+            try {
+                File f = new File(filePath);
+                if (f.createNewFile()) {
+                    System.out.println("File created: " + f.getName());
+                    System.out.println("path: " + f.getPath());
+                } else {
+                    System.out.println("File already exists.");
+                }
+            } catch (IOException ex) {
+                System.out.println("IO exception error");
+                System.exit(1);
+            }
+        } catch (InvalidTextFormatException e) {
+            System.out.println("Error in text format");
+            System.exit(1);
+
+        }
+
+//        int counter = 0;
+        System.out.println("how can I help you?");
         int numberMark;
         Task task;
-        boolean isTaskAdded;
+        boolean isNumberOfTaskChanged;
         while (true) {
             userString = userInput.nextLine();
-            isTaskAdded = false;
+            //echo(userString); //uncomment for txt ui-testing
+            isNumberOfTaskChanged = false;
             try {
-                commandChecker(userString, taskArray);
+                commandChecker(userString);
                 if (userString.startsWith("bye")) {
                     break;
                 }
                 if (userString.startsWith("list")) {
-                    checkNullArray(taskArray);
+                    checkEmptyList(taskArray);
                     printTask(taskArray);
                     continue;
                 }
@@ -44,39 +118,62 @@ public class Bryan {
                     case "unmark":
                         numberMark = Integer.parseInt(userString.substring(userString.indexOf(" ") + 1));
                         boolean isMark = userString.startsWith("mark");
-                        taskArray[numberMark - 1].setDone(isMark);
+                        taskArray.get(numberMark - 1).setDone(isMark);
                         String message = (isMark) ? "Nice! I've marked this task as done:" : " OK, I've marked this task as not done yet:";
                         System.out.println(message);
-                        System.out.println(taskArray[numberMark - 1]);
+                        System.out.println(taskArray.get(numberMark - 1));
+                        try {
+                            FileWriter fw = new FileWriter(filePath);
+                            for (Task t : taskArray) {
+                                fw.write(t.convertToTxtFormat() + System.lineSeparator());
+                            }
+                            fw.close();
+                        } catch (IOException e) {
+                            System.out.println("error in file io");
+                            System.exit(1);
+                        }
                         break;
                     case "todo":
-                        String description = parsedCommand[1];
+//                        String description = parsedCommand[1];
                         task = new Todo(userString.split(" ", 2)[1]);
-                        taskArray[counter] = task;
-                        isTaskAdded = true;
+                        taskArray.add(task);
+                        isNumberOfTaskChanged = true;
                         break;
                     case "deadline":
                         task = new Deadline(userString.split(" ", 2)[1]);
-                        taskArray[counter] = task;
-                        isTaskAdded = true;
+                        taskArray.add(task);
+                        isNumberOfTaskChanged = true;
                         break;
                     case "event":
                         task = new Event(userString.split(" ", 2)[1]);
-                        taskArray[counter] = task;
-                        isTaskAdded = true;
+                        taskArray.add(task);
+                        isNumberOfTaskChanged = true;
                         break;
+                    case "delete":
+                        taskArray.remove(Integer.parseInt(parsedCommand[1]) - 1);
+                        isNumberOfTaskChanged = true;
                 }
 
-                if (isTaskAdded) {
-                    counter++;
-                    System.out.println("anything else?");
+                if (isNumberOfTaskChanged) {
+//                    counter++;
+                    try {
+                        FileWriter fw = new FileWriter(filePath, true);
+                        fw.write(taskArray.get(taskArray.size() - 1).convertToTxtFormat() + System.lineSeparator());
+                        fw.close();
+                    } catch (IOException e) {
+                        System.out.println("error in file io");
+                        System.exit(1);
+                    }
+                    System.out.println("now you have " + taskArray.size() + " tasks in the list");
                 }
+
+
             } catch (InvalidCommandException e) {
                 System.out.println("invalid command");
                 printCommandArray();
             } catch (EmptyTaskException e) {
                 System.out.println("list is still empty, please add new tasks");
-            } catch (NullPointerException e) {
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("there is no task in that index, make sure you have the correct number");
             } catch (MarkingException e) {
                 System.out.println("you can not marked an marked task, vice versa");
@@ -95,18 +192,22 @@ public class Bryan {
             } catch (InvalidTodoFormatException e) {
                 System.out.println("wrong todo format, it should contain description");
                 System.out.println("eg. todo {description}");
+            } catch (InvalidDeleteFormatException e) {
+                System.out.println("wrong delete format, it should be followed by index");
+                System.out.println("eg. delete {index}");
             } catch (NumberFormatException e) {
                 System.out.println("please enter an integer after the command 'mark' or 'unmark' ");
                 System.out.println("eg. mark 1");
-            } catch (EmptyDeadlineDescription e){
+            } catch (EmptyDeadlineDescription e) {
                 System.out.println("description or by is empty, please follow the correct deadline format");
                 System.out.println("eg. deadline {description} /by {by date}");
-            } catch (EmptyEventDescription e){
+            } catch (EmptyEventDescription e) {
                 System.out.println("description or from is empty or to is empty, please follow the correct event format");
                 System.out.println("eg. event {description} /from {from date} /to {to date}");
-            } catch (ArrayIndexOutOfBoundsException e){
-                System.out.println("number is out of index, maximum list length is 100");
             }
+//            catch (ArrayIndexOutOfBoundsException e){
+//                System.out.println("number is out of index, maximum list length is 100");
+//            }
 
         }
         sayBye();
@@ -114,18 +215,18 @@ public class Bryan {
 
     public static void printCommandArray() {
         System.out.println("these are the valid commands:");
-        for (int i = 0; i < commandArray.length; i++) {
-            System.out.println("-" + commandArray[i]);
+        for (String s : commandArray) {
+            System.out.println("-" + s);
         }
     }
 
-    public static void printTask(Task[] taskArray) {
+    public static void printTask(ArrayList<Task> taskArray) {
 //        String checkbox;
-        for (int i = 0; i < taskArray.length; i++) {
-            if (taskArray[i] == null) {
-                break;
-            }
-            System.out.println(i + 1 + "." + taskArray[i]);
+        for (int i = 0; i < taskArray.size(); i++) {
+//            if (taskArray.get == null) {
+//                break;
+//            }
+            System.out.println(i + 1 + "." + taskArray.get(i));
         }
     }
 
@@ -149,24 +250,17 @@ public class Bryan {
         System.out.println("BBBBB  R   R    Y   A   A N   N");
     }
 
-    public static void commandChecker(String userString, Task[] taskArray) throws InvalidCommandException, MarkingException, InvalidDeadlineFormatException, InvalidEventFormatException {
+    public static void commandChecker(String userString) throws
+            InvalidCommandException, MarkingException, InvalidDeadlineFormatException, InvalidEventFormatException {
         boolean isValid = false;
-        int numberMark;
-        boolean isMark;
-        for (int i = 0; i < commandArray.length; i++) {
-            if (userString.startsWith(commandArray[i]) && !commandArray[i].equals("bye") && !commandArray[i].equals("list")) {
+//        int numberMark;
+//        boolean isMark;
+        for (String s : commandArray) {
+            if (userString.startsWith(s) && !s.equals("bye") && !s.equals("list")) {
                 isValid = true;
-//            } else if (userString.equals("list") && taskArray[0] == null) {
-//                throw new EmptyTaskException();
-//            } else if (userString.startsWith("mark ") || userString.equals("unmark ")) {
-//                numberMark = Integer.parseInt(userString.substring(userString.indexOf(" ") + 1));
-//                isMark = (userString.startsWith("mark ")) ? true : false;
-//                if ((isMark && taskArray[numberMark - 1].isDone() || (!isMark && taskArray[numberMark - 1].isDone()))) {
-//                    throw new MarkingException();
-//                }
             } else if (userString.startsWith("event ") && !(userString.contains("/from") && userString.contains("/to") && userString.indexOf("/from") < userString.indexOf("/to"))) {//&& userString.indexOf("/from") > userString.indexOf("/to")) {
                 throw new InvalidEventFormatException();
-            } else if (userString.equals(commandArray[i])) {
+            } else if (userString.equals(s)) {
                 isValid = true;
             }
         }
@@ -177,13 +271,14 @@ public class Bryan {
 
     }
 
-    public static void checkNullArray(Task[] taskArray) throws EmptyTaskException {
-        if (taskArray[0] == null) {
+    public static void checkEmptyList(ArrayList<Task> taskArray) throws EmptyTaskException {
+        if (taskArray.isEmpty()) {
             throw new EmptyTaskException();
         }
     }
 
-    public static void checkDescription(String[] commandArray, String command) throws InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
+    public static void checkDescription(String[] commandArray, String command) throws
+            InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
         if (commandArray.length != 2) {
             switch (command) {
                 case "todo":
@@ -196,6 +291,8 @@ public class Bryan {
                     throw new InvalidEventFormatException();
                 case "unmark":
                     throw new InvalidUnmarkFormatException();
+                case "delete":
+                    throw new InvalidDeleteFormatException();
             }
         }
     }

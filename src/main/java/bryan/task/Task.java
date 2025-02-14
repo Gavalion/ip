@@ -2,12 +2,11 @@ package bryan.task;
 
 import bryan.exception.MarkingException;
 
-public class Task{
+public class Task {
     protected String description;
     protected boolean isDone;
-    protected String taskType;
 
-    public Task(String description){
+    public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
@@ -35,9 +34,13 @@ public class Task{
         isDone = done;
     }
 
+    public String convertToTxtFormat() {
+        return (this.isDone() ? "1" : "0") + " # " + this.description;
+    }
+
     @Override
     public String toString() {
-        return "["+this.getStatusIcon()+"] "+ this.getDescription();
+        return "[" + this.getStatusIcon() + "] " + this.getDescription();
     }
 
 //...
