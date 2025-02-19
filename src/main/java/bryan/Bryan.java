@@ -15,8 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Bryan {
-    public static String[] commandArray = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete"};
-    public static String filePath = "data1/bryan1.txt"; //change to data/bryan.txt for real test
+    public static final String[] COMMAND_ARRAY = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete"};
+    public static final String FILE_PATH = "data1/bryan1.txt"; //change to data/bryan.txt for real test
 
 
     public static Task stringToTask(String input) throws MarkingException, EmptyEventDescription, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidTodoFormatException, EmptyDeadlineDescription, InvalidTextFormatException {
@@ -37,7 +37,7 @@ public class Bryan {
 
     public static ArrayList<Task> readFile() throws FileNotFoundException, InvalidTextFormatException {
         ArrayList<Task> taskArray = new ArrayList<>();
-        File f = new File(filePath);
+        File f = new File(FILE_PATH);
         Scanner s = new Scanner(f);
         while (s.hasNextLine()) {
             try {
@@ -74,7 +74,7 @@ public class Bryan {
                 System.out.println("Failed to create directory. It may already exist");
             }
             try {
-                File f = new File(filePath);
+                File f = new File(FILE_PATH);
                 if (f.createNewFile()) {
                     System.out.println("File created: " + f.getName());
                     System.out.println("path: " + f.getPath());
@@ -123,7 +123,7 @@ public class Bryan {
                         System.out.println(message);
                         System.out.println(taskArray.get(numberMark - 1));
                         try {
-                            FileWriter fw = new FileWriter(filePath);
+                            FileWriter fw = new FileWriter(FILE_PATH);
                             for (Task t : taskArray) {
                                 fw.write(t.convertToTxtFormat() + System.lineSeparator());
                             }
@@ -151,13 +151,24 @@ public class Bryan {
                         break;
                     case "delete":
                         taskArray.remove(Integer.parseInt(parsedCommand[1]) - 1);
-                        isNumberOfTaskChanged = true;
+                        try {
+                            FileWriter fw = new FileWriter(FILE_PATH);
+                            for (Task t : taskArray) {
+                                fw.write(t.convertToTxtFormat() + System.lineSeparator());
+                            }
+                            fw.close();
+                        } catch (IOException e) {
+                            System.out.println("error in file io");
+                            System.exit(1);
+                        }
+                        System.out.println("task deleted");
+                        System.out.println("now you have " + taskArray.size() + " tasks in the list");
                 }
 
                 if (isNumberOfTaskChanged) {
 //                    counter++;
                     try {
-                        FileWriter fw = new FileWriter(filePath, true);
+                        FileWriter fw = new FileWriter(FILE_PATH, true);
                         fw.write(taskArray.get(taskArray.size() - 1).convertToTxtFormat() + System.lineSeparator());
                         fw.close();
                     } catch (IOException e) {
@@ -170,7 +181,7 @@ public class Bryan {
 
             } catch (InvalidCommandException e) {
                 System.out.println("invalid command");
-                printCommandArray();
+                printCOMMAND_ARRAY();
             } catch (EmptyTaskException e) {
                 System.out.println("list is still empty, please add new tasks");
             } catch (IndexOutOfBoundsException e) {
@@ -213,9 +224,11 @@ public class Bryan {
         sayBye();
     }
 
-    public static void printCommandArray() {
+//    public static void overWriteFile()
+
+    public static void printCOMMAND_ARRAY() {
         System.out.println("these are the valid commands:");
-        for (String s : commandArray) {
+        for (String s : COMMAND_ARRAY) {
             System.out.println("-" + s);
         }
     }
@@ -255,7 +268,7 @@ public class Bryan {
         boolean isValid = false;
 //        int numberMark;
 //        boolean isMark;
-        for (String s : commandArray) {
+        for (String s : COMMAND_ARRAY) {
             if (userString.startsWith(s) && !s.equals("bye") && !s.equals("list")) {
                 isValid = true;
             } else if (userString.startsWith("event ") && !(userString.contains("/from") && userString.contains("/to") && userString.indexOf("/from") < userString.indexOf("/to"))) {//&& userString.indexOf("/from") > userString.indexOf("/to")) {
@@ -277,9 +290,9 @@ public class Bryan {
         }
     }
 
-    public static void checkDescription(String[] commandArray, String command) throws
+    public static void checkDescription(String[] COMMAND_ARRAY, String command) throws
             InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
-        if (commandArray.length != 2) {
+        if (COMMAND_ARRAY.length != 2) {
             switch (command) {
                 case "todo":
                     throw new InvalidTodoFormatException();
