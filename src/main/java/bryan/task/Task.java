@@ -28,7 +28,7 @@ public class Task {
     }
 
     public void setDone(boolean done) throws MarkingException {
-        if ((done && this.isDone() || (!done && this.isDone()))) {
+        if ((done && this.isDone() || (!done && !this.isDone()))) {
             throw new MarkingException();
         }
         isDone = done;
