@@ -3,6 +3,7 @@ package bryan;
 import bryan.exception.*;
 import bryan.task.*;
 
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class Bryan {
     public static final String FILE_PATH = "data1/bryan.txt"; //change to data/bryan.txt for real test
 
-
+    
     public static void main(String[] args) {
         Ui ui = new Ui();
         ui.greeting();
@@ -59,6 +60,10 @@ public class Bryan {
                 ui.printEmptyDeadlineDescription();
             } catch (EmptyEventDescription e) {
                 ui.printEmptyEventDescription();
+            }catch (InvalidAfterFormatException | InvalidBeforeFormatException e){
+                ui.printInvalidBeforeAfterFormatException();
+            }catch (DateTimeParseException e){
+                ui.printInvalidDateFormat();
             }
 //            catch (ArrayIndexOutOfBoundsException e){
 //                System.out.println("number is out of index, maximum list length is 100");
