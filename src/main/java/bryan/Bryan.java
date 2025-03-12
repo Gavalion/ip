@@ -19,20 +19,18 @@ public class Bryan {
         String userString;
         Storage storage = new Storage(FILE_PATH);
         ArrayList<Task> taskArray = storage.run();
-
-
         Task task;
         boolean isNewTaskAdded;
-        loop:
         while (true) {
             userString = userInput.nextLine();
             //echo(userString); //uncomment for txt ui-testing
             isNewTaskAdded = false;
             try {
+
                 Parser parsedCommand = new Parser(userString);
                 String commandText = parsedCommand.getCommandText();
                 String detail = parsedCommand.getDetail();
-                TaskList tasklist = new TaskList(commandText,detail,taskArray, storage);
+                TaskList tasklist = new TaskList(commandText, detail, taskArray, storage);
                 tasklist.process();
             } catch (InvalidCommandException e) {
                 ui.printInvalidCommandException();
