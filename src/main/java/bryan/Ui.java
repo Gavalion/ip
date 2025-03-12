@@ -73,6 +73,29 @@ public class Ui {
         System.out.println(markMessage);
         System.out.println(task);
     }
+    public void printDateSearchTasks(ArrayList<Task> taskArray, String type){
+        if (taskArray.isEmpty()){
+            System.out.println("no deadline is "+ type +" that date");
+        }
+        printTask(taskArray);
+    }
+    public void printInvalidBeforeAfterFormatException (){
+        System.out.println("invalid before/after format");
+        System.out.println("there should be a date following the word 'after' or 'before'");
+        System.out.println("eg. before {dd-mm-yyyy}");
+    }
+    public void printInvalidDateFormat(){
+        System.out.println("invalid date format");
+        System.out.println("it should be dd-mm-yyyy");
+    }
+
+    public void printSearchedTasks(ArrayList<Task> taskArray){
+        if (taskArray.isEmpty()){
+            System.out.println("no task contains that description");
+        }
+        printTask(taskArray);
+    }
+
 
     /**
      * Print ui message error if command is invalid.
@@ -113,6 +136,7 @@ public class Ui {
      */
     public void printInvalidDeadlineFormatException() {
         System.out.println("wrong deadline format, it should contain description and followed with one '/by' and by date");
+        System.out.println("by date is formated dd-mm-yyyy");
         System.out.println("eg. deadline {description} /by {by date}");
     }
 
@@ -171,5 +195,10 @@ public class Ui {
         System.out.println("description or by is empty, please follow the correct deadline format");
         System.out.println("eg. deadline {description} /by {by date}");
     }
+    public void printFindFormatException() {
+        System.out.println("Wrong find format, add details after find");
+        System.out.println("eg. find {details}");
+    }
+
 
 }
