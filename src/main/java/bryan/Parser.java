@@ -3,7 +3,7 @@ package bryan;
 import bryan.exception.*;
 
 public class Parser {
-    public static final String[] COMMAND_ARRAY = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete"};
+    public static final String[] COMMAND_ARRAY = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete", "find"};
     protected String commandText;
     protected String detail;
 //    protected String by;
@@ -11,7 +11,7 @@ public class Parser {
 
 
     public static void commandChecker(String userString) throws
-            InvalidCommandException, InvalidEventFormatException{
+            InvalidCommandException, InvalidEventFormatException {
         boolean isValid = false;
         for (String s : COMMAND_ARRAY) {
             if (userString.startsWith(s) && !s.equals("bye") && !s.equals("list")) {
@@ -30,7 +30,7 @@ public class Parser {
     }
 
     public Parser(String userString) throws
-            InvalidCommandException, InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
+            InvalidFindFormatException, InvalidCommandException, InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
         try {
             commandChecker(userString);
             String[] parsedCommand = userString.split(" ", 2);
@@ -40,7 +40,10 @@ public class Parser {
             }
             this.checkDescription();
 
-        } catch (InvalidCommandException | InvalidDeleteFormatException| InvalidDeadlineFormatException| InvalidEventFormatException| InvalidMarkFormatException| InvalidUnmarkFormatException| InvalidTodoFormatException     e ) {
+        } catch (InvalidFindFormatException | InvalidCommandException | InvalidDeleteFormatException |
+                 InvalidDeadlineFormatException | InvalidEventFormatException | InvalidMarkFormatException |
+                 InvalidUnmarkFormatException |
+                 InvalidTodoFormatException e) {
             throw e;
         }
 
@@ -53,8 +56,9 @@ public class Parser {
     public String getDetail() {
         return detail;
     }
+
     public void checkDescription() throws
-            InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
+            InvalidFindFormatException, InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
         if (this.detail == null) {
             switch (this.getCommandText()) {
                 case "todo":
@@ -69,6 +73,8 @@ public class Parser {
                     throw new InvalidUnmarkFormatException();
                 case "delete":
                     throw new InvalidDeleteFormatException();
+                case "find":
+                    throw new InvalidFindFormatException();
             }
         }
     }

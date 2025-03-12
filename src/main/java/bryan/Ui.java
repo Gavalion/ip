@@ -47,6 +47,14 @@ public class Ui {
         System.out.println(task);
     }
 
+    public void printSearchedTasks(ArrayList<Task> taskArray){
+        if (taskArray.isEmpty()){
+            System.out.println("no task contains that description");
+        }
+        printTask(taskArray);
+    }
+
+
     public void printInvalidCommandException(){
         System.out.println("invalid commandText");
         this.printCommandArray();
@@ -96,5 +104,10 @@ public class Ui {
         System.out.println("description or by is empty, please follow the correct deadline format");
         System.out.println("eg. deadline {description} /by {by date}");
     }
+    public void printFindFormatException() {
+        System.out.println("Wrong find format, add details after find");
+        System.out.println("eg. find {details}");
+    }
+
 
 }
