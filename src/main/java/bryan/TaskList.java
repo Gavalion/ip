@@ -8,7 +8,10 @@ import bryan.task.Todo;
 import java.util.stream.Collectors;
 //import bryan.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 
 public class TaskList {
@@ -24,10 +27,11 @@ public class TaskList {
         this.storage = storage;
     }
 
-    public void process() throws EmptyTaskException, MarkingException, EmptyEventDescription, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidTodoFormatException, EmptyDeadlineDescription {
+    public void process() throws DateTimeParseException, EmptyTaskException, MarkingException, EmptyEventDescription, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidTodoFormatException, EmptyDeadlineDescription {
         Ui ui = new Ui();
         boolean isNewTaskAdded = false;
         Task task;
+        ArrayList<Task> searchedTasks;
         switch (this.commandText) {
             case "bye":
                 System.exit(130);
@@ -69,6 +73,28 @@ public class TaskList {
                         .filter(searchedTask -> searchedTask.getDescription().contains(this.detail))
                         .collect(Collectors.toCollection(ArrayList::new));
                 ui.printSearchedTasks(searchedTasks);
+            case "before":
+                try {
+                    LocalDate dateBefore = LocalDate.parse(this.detail, Deadline.DATE_TIME_FORMATER);
+                    searchedTasks = taskArray.stream()
+                            .filter(searchedTask -> searchedTask instanceof Deadline)
+                            .filter(searchedTask -> ((Deadline) searchedTask).getBy().isBefore(dateBefore))
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    ui.printDateSearchTasks(searchedTasks, "before");
+                } catch (DateTimeParseException e) {
+                    throw e;
+                }
+            case "after":
+                try {
+                    LocalDate dateAfter = LocalDate.parse(this.detail, Deadline.DATE_TIME_FORMATER);
+                    searchedTasks = taskArray.stream()
+                            .filter(searchedTask -> searchedTask instanceof Deadline)
+                            .filter(searchedTask -> ((Deadline) searchedTask).getBy().isAfter(dateAfter))
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    ui.printDateSearchTasks(searchedTasks, "after");
+                } catch (DateTimeParseException e) {
+                    throw e;
+                }
         }
 
         if (isNewTaskAdded) {
@@ -77,6 +103,7 @@ public class TaskList {
         }
 
     }
+
     public void checkEmptyList(ArrayList<Task> taskArray) throws EmptyTaskException {
         if (taskArray.isEmpty()) {
             throw new EmptyTaskException();
