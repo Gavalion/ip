@@ -29,6 +29,18 @@ public class Parser {
 
     }
 
+    /**
+     * Parser constructor to get the command name and detail.
+     * Detail is the string after the command, it will be further processed by other methods based on its command.
+     * @param userString The user input from the gui
+     * @throws InvalidCommandException Exception due to error in command format
+     * @throws InvalidDeleteFormatException Exception due to error in delete format
+     * @throws InvalidDeadlineFormatException Exception due to error in deadline format
+     * @throws InvalidEventFormatException Exception due to error in event format
+     * @throws InvalidMarkFormatException Exception due to error in mark format
+     * @throws InvalidUnmarkFormatException Exception due to error in unmark format
+     * @throws InvalidTodoFormatException Exception due to error in todo format
+     */
     public Parser(String userString) throws
             InvalidCommandException, InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
         try {
@@ -53,6 +65,19 @@ public class Parser {
     public String getDetail() {
         return detail;
     }
+
+    /**
+     * Check whether the command have any error in formatting.
+     * Throw error if there is any exception triggered.
+     * Command checked are commands that requires details to be functional.
+     *
+     * @throws InvalidDeleteFormatException
+     * @throws InvalidDeadlineFormatException
+     * @throws InvalidEventFormatException
+     * @throws InvalidMarkFormatException
+     * @throws InvalidUnmarkFormatException
+     * @throws InvalidTodoFormatException
+     */
     public void checkDescription() throws
             InvalidDeleteFormatException, InvalidDeadlineFormatException, InvalidEventFormatException, InvalidMarkFormatException, InvalidUnmarkFormatException, InvalidTodoFormatException {
         if (this.detail == null) {
