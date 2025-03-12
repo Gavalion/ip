@@ -5,6 +5,7 @@ import bryan.task.Deadline;
 import bryan.task.Event;
 import bryan.task.Task;
 import bryan.task.Todo;
+import java.util.stream.Collectors;
 //import bryan.*;
 
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ public class TaskList {
         switch (this.commandText) {
             case "bye":
                 System.exit(130);
+                ui.sayBye();
                 break;
             case "list":
                 this.checkEmptyList(taskArray);
@@ -66,6 +68,11 @@ public class TaskList {
                 taskArray.remove(Integer.parseInt(this.detail) - 1);
                 this.storage.taskToText(taskArray);
                 ui.printListSize("deleted", taskArray.size());
+            case "find":
+                ArrayList<Task> searchedTasks = taskArray.stream()
+                        .filter(searchedTask -> searchedTask.getDescription().contains(this.detail))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                ui.printSearchedTasks(searchedTasks);
             case "before":
                 try {
                     LocalDate dateBefore = LocalDate.parse(this.detail, Deadline.DATE_TIME_FORMATER);

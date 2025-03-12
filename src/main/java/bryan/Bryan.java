@@ -60,6 +60,8 @@ public class Bryan {
                 ui.printEmptyDeadlineDescription();
             } catch (EmptyEventDescription e) {
                 ui.printEmptyEventDescription();
+            } catch (InvalidFindFormatException e) {
+                ui.printFindFormatException();
             }catch (InvalidAfterFormatException | InvalidBeforeFormatException e){
                 ui.printInvalidBeforeAfterFormatException();
             }catch (DateTimeParseException e){
@@ -76,13 +78,6 @@ public class Bryan {
     public static void echo(String userString) {
         System.out.println(userString);
     }
-
-//    public static void checkEmptyList(ArrayList<Task> taskArray) throws EmptyTaskException {
-//        if (taskArray.isEmpty()) {
-//            throw new EmptyTaskException();
-//        }
-//    }
-
 
 }
 
