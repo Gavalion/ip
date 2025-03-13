@@ -2,7 +2,17 @@
 
 Bryan is a simple task management application based on Duke, featuring a cli-based interface for managing tasks efficiently.
 
-## Features
+## **Quick Start**
+1. Ensure you have **Java 11 or higher** installed.
+2. Download the latest `Bryan.jar` file.
+3. Run the application using:
+   ```sh
+   java -jar Bryan.jar
+   ```
+
+---
+
+## Commands
 
 <div markdown="block" class="alert alert-info">
 
@@ -107,6 +117,9 @@ event japan trip /from 20th may /to 31th may
 ### **6. Mark/Unmark a Task: `mark` / `unmark`**
 Marks a task as done or not done based on the provided index.
 
+- The index refers to the index number shown in the displayed person list.
+- The index must be a positive integer 1, 2, 3, …​
+
 📌 **Format:**  
 ```
 mark {INDEX}
@@ -126,6 +139,9 @@ mark 3
 ### **7. Delete a Task: `delete`**
 Deletes a task from the list based on the provided index.
 
+- The index refers to the index number shown in the displayed person list.
+- The index must be a positive integer 1, 2, 3, …​
+
 📌 **Format:**  
 ```
 delete {INDEX}
@@ -141,6 +157,8 @@ delete 2
 
 ### **8. Search tasks by Keyword: `find`**
 Finds and displays all tasks that contain the specified keyword. The keyword can only be used to search based on tasks description.
+ 
+ - The search is case-sensitive. e.g **meeting** will not match **Meeting**.
 
 📌 **Format:**  
 ```
@@ -166,17 +184,15 @@ after {DATE}
 
 ![After Example](images/after%20example.png) 
 
-❗ **The date is needed, otherwise an exception is raised.**
+❗ **The date is needed, otherwise an exception is raised.**   
 ❗ **The date must be in `dd-mm-yyyy` format, otherwise an exception is raised.**
+
 ---
 
-## **Installation**
-1. Ensure you have **Java 11 or higher** installed.
-2. Download the latest `Bryan.jar` file.
-3. Run the application using:
-   ```sh
-   java -jar Bryan.jar
-   ```
+## **Saving**
+
+The application will automatically save all tasks when task is being manipulated from commands like `mark`, `unmark`, `delete`, `todo`, `deadline` and `event`.    
+the file path is based on the current directory of where the jar file being exceuted, change `FILE_PATH` in bryan.java to change the directory.  
 
 ---
 
@@ -184,7 +200,4 @@ after {DATE}
 Once the application is running, type any of the commands listed above in the command input field to interact with Bryan.
 
 ---
-
-## **License**
-This project is open-source and available for modification and distribution.
 
