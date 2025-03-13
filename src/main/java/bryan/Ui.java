@@ -156,7 +156,7 @@ public class Ui {
      */
     public void printInvalidMarkFormatException() {
         System.out.println("wrong mark format, a number after unmark");
-        System.out.println("eg. mark {number}");
+        System.out.println("eg. mark {index}");
     }
 
     /**
@@ -164,7 +164,7 @@ public class Ui {
      */
     public void printInvalidUnmarkFormatException() {
         System.out.println("wrong unmark format, a number after unmark");
-        System.out.println("eg. unmark {number}");
+        System.out.println("eg. unmark {index}");
     }
 
     /**
@@ -200,8 +200,8 @@ public class Ui {
     }
 
     public void printFindFormatException() {
-        System.out.println("Wrong find format, add details after find");
-        System.out.println("eg. find {details}");
+        System.out.println("Wrong find format, add keyword after find");
+        System.out.println("eg. find {keywordl}");
     }
 
 

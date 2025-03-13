@@ -1,8 +1,4 @@
 T # 0 # read book
 E # 1 # project meeting # Aug 6th 2-4pm
-T # 1 # aaaaaaa
-T # 1 # asaa
-T # 0 # asaasaaaaD # 0 # saas # 05-05-2002
 D # 0 # submit ip # 14-03-2025
-D # 0 # tp meeting # 17-07-2026
-D # 0 # aa # 05-05-2005
+D # 1 # tp meeting # 17-07-2026

@@ -1,30 +1,190 @@
- Duke User Guide
+# Bryan
 
-// Update the title above to match the actual product name
+Bryan is a simple task management application based on Duke, featuring a cli-based interface for managing tasks efficiently.
 
-// Product screenshot goes here
+## Features
 
-// Product intro goes here
+<div markdown="block" class="alert alert-info">
 
-## Adding deadlines
+* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+  e.g. in `deadline {DESCRIPTION} /by {DATE}`, `DESCRIPTION` and `DATE` parameter which can be used as `deadline submit ip /by 14-03-2025`.
 
-// Describe the action and its outcome.
 
-// Give examples of usage
+* Parameters must be in any order.<br>
+  e.g. in event `{DESCRIPTION} /from {FROM DATE} /to {TO DATE}` the `/from` is always stated befor `/to`.
 
-Example: `keyword (optional arguments)`
+* Extraneous parameters for commands that do not take in parameters (such as `bye` and `list`) will be considered and raised as exception.<br>
+  e.g. if the command specifies `bye 11`, it will be considered as an error and valid commands are printed for user.
 
-// A description of the expected outcome goes here
+  ![Extra Parameter](images/extra%20param.png)
 
+* ❗ Indicates possible errors encountered, some errors are not listed in this README because their messages clearly explain the issue.
+</div>
+
+
+Bryan supports the following commands to help you manage your tasks:
+
+---
+
+### **1. Exit the program: `bye`**
+Shuts down the application with exit code `130`.
+
+📌 **Format:**  
 ```
-expected output
+bye
+```
+📌 **Example Output:**  
+![Bye Message](images/bye%20message.png)
+
+---
+
+### **2. Listing all tasks: `list`**
+Displays all the tasks currently stored in the application.
+
+📌 **Format:**  
+```
+list
+```
+📌 **Example Output:**  
+![List Message](images/list%20message.png)
+
+❗ **If no tasks are added, an error will occur.**  
+![List Error](images/list%20error.png)  
+
+---
+
+### **3. Create a To-Do Task: `todo`**
+Creates a new **To-Do** task with the given description.
+
+📌 **Format:**  
+```
+todo {DESCRIPTION}
+```
+📌 **Example:**  
+```
+todo go to school
 ```
 
-## Feature ABC
+❗ **If the description is empty, an error will occur.**  
+![Todo Error](images/todo%20error.png)
 
-// Feature details
+---
+
+### **4. Create a Deadline Task: `deadline`**
+Creates a **Deadline** task with a specific due date in (dd-mm-yyyy) format.
+
+📌 **Format:**  
+```
+deadline {DESCRIPTION} /by {DATE}
+```
+📌 **Example:**  
+```
+deadline submit assignment /by 15-05-2025
+```
+
+❗ **The deadline format is invalid due to missing `/by`, empty date or empty description.**  
+![Deadline Error](images/deadline%20error.png) 
+
+---
+
+### **5. Create an Event Task: `event`**
+Creates an **Event** task with a specified start and end time. The date is stored as a string instead of date time.
+
+📌 **Format:**  
+```
+event {DESCRIPTION} /from {FROM DATE} /to {TO DATE}
+```
+📌 **Example:**  
+```
+event japan trip /from 20th may /to 31th may
+```
+
+❗ **The event format is invalid due to missing `/from`, `/to`, empty from date, empty to date, `/from` is stated after `/to` or empty description.**  
+![Event Error](images/event%20error.png) 
+
+---
+
+### **6. Mark/Unmark a Task: `mark` / `unmark`**
+Marks a task as done or not done based on the provided index.
+
+📌 **Format:**  
+```
+mark {INDEX}
+unmark {INDEX}
+```
+📌 **Example:**  
+```
+mark 3
+```
+
+❗ **There is going to be an exception raised when marking a marked task, vice versa.**  
+❗ **The index can not be out of bounds, if so it will raise an exception.**  
 
 
-## Feature XYZ
+---
 
-// Feature details
+### **7. Delete a Task: `delete`**
+Deletes a task from the list based on the provided index.
+
+📌 **Format:**  
+```
+delete {INDEX}
+```
+📌 **Example:**  
+```
+delete 2
+```
+
+❗ **The index can not be out of bounds, if so it will raise an exception.**
+
+---
+
+### **8. Search tasks by Keyword: `find`**
+Finds and displays all tasks that contain the specified keyword. The keyword can only be used to search based on tasks description.
+
+📌 **Format:**  
+```
+find {KEYWORD}
+```
+📌 **Example:**  
+
+![Find Example](images/find%20example.png) 
+
+❗ **The keyword is needed, otherwise an exception is raised.**
+
+---
+
+### **9. Search deadlines by Date: `before` / `after`**
+Finds and lists all **deadline** tasks that are due before or after the given date.
+
+📌 **Format:**  
+```
+before {DATE}
+after {DATE}
+```
+📌 **Example:**  
+
+![After Example](images/after%20example.png) 
+
+❗ **The date is needed, otherwise an exception is raised.**
+❗ **The date must be in `dd-mm-yyyy` format, otherwise an exception is raised.**
+---
+
+## **Installation**
+1. Ensure you have **Java 11 or higher** installed.
+2. Download the latest `Bryan.jar` file.
+3. Run the application using:
+   ```sh
+   java -jar Bryan.jar
+   ```
+
+---
+
+## **Usage**
+Once the application is running, type any of the commands listed above in the command input field to interact with Bryan.
+
+---
+
+## **License**
+This project is open-source and available for modification and distribution.
+

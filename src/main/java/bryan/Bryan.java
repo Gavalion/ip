@@ -8,10 +8,11 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 
-public class Bryan {
-    public static final String FILE_PATH = "data1/bryan.txt"; //change to data/bryan.txt for real test
 
-    
+public class Bryan {
+    public static final String FILE_PATH = "data/bryan.txt"; //change to data/bryan.txt for real test
+
+
     public static void main(String[] args) {
         Ui ui = new Ui();
         ui.greeting();
