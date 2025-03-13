@@ -143,7 +143,7 @@ public class Storage {
     public void createNewFolder(){
         System.out.println("File not found");
         System.out.println("please check the txt file, it should be bryan.txt under the \"data\" folder");
-        File directory = new File("data1");
+        File directory = new File("data");
         boolean directoryCreated = directory.mkdir();
         if (directoryCreated) {
             System.out.println("Directory created");

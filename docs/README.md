@@ -3,12 +3,14 @@
 Bryan is a simple task management application based on Duke, featuring a cli-based interface for managing tasks efficiently.
 
 ## **Quick Start**
-1. Ensure you have **Java 11 or higher** installed.
-2. Download the latest `Bryan.jar` file.
-3. Run the application using:
+1. Ensure you have **Java 17 or higher** installed.
+2. Go to the main github page
+3. Download the latest `ip.jar` file.
+4. Run the application using:
    ```sh
-   java -jar Bryan.jar
+   java -jar ip.jar
    ```
+
 
 ---
 

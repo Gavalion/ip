@@ -1,4 +1,5 @@
-T # 1 # read book
-D # 0 # return book # June 6th
-E # 0 # project meeting # Aug 6th 2-4pm
-T # 1 # join sports club
+T # 0 # read book
+E # 1 # project meeting # Aug 6th 2-4pm
+D # 1 # submit ip # 14-03-2025
+D # 0 # tp meeting # 17-07-2026
+D # 0 # ee4308 meeting # 19-07-2026

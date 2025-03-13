@@ -1,4 +1,0 @@
-T # 0 # read book
-E # 1 # project meeting # Aug 6th 2-4pm
-D # 0 # submit ip # 14-03-2025
-D # 1 # tp meeting # 17-07-2026
