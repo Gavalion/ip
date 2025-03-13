@@ -5,7 +5,7 @@ import bryan.task.Task;
 import java.util.ArrayList;
 
 public class Ui {
-    public static String[] COMMAND_ARRAY = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete"};
+    public static String[] COMMAND_ARRAY = {"todo", "list", "deadline", "mark", "unmark", "event", "bye", "delete", "find", "after", "before"};
 
     public void printLine() {
         System.out.println("----------------------------------------------------");
@@ -73,24 +73,27 @@ public class Ui {
         System.out.println(markMessage);
         System.out.println(task);
     }
-    public void printDateSearchTasks(ArrayList<Task> taskArray, String type){
-        if (taskArray.isEmpty()){
-            System.out.println("no deadline is "+ type +" that date");
+
+    public void printDateSearchTasks(ArrayList<Task> taskArray, String type) {
+        if (taskArray.isEmpty()) {
+            System.out.println("no deadline is " + type + " that date");
         }
         printTask(taskArray);
     }
-    public void printInvalidBeforeAfterFormatException (){
+
+    public void printInvalidBeforeAfterFormatException() {
         System.out.println("invalid before/after format");
         System.out.println("there should be a date following the word 'after' or 'before'");
         System.out.println("eg. before {dd-mm-yyyy}");
     }
-    public void printInvalidDateFormat(){
+
+    public void printInvalidDateFormat() {
         System.out.println("invalid date format");
         System.out.println("it should be dd-mm-yyyy");
     }
 
-    public void printSearchedTasks(ArrayList<Task> taskArray){
-        if (taskArray.isEmpty()){
+    public void printSearchedTasks(ArrayList<Task> taskArray) {
+        if (taskArray.isEmpty()) {
             System.out.println("no task contains that description");
         }
         printTask(taskArray);
@@ -195,6 +198,7 @@ public class Ui {
         System.out.println("description or by is empty, please follow the correct deadline format");
         System.out.println("eg. deadline {description} /by {by date}");
     }
+
     public void printFindFormatException() {
         System.out.println("Wrong find format, add details after find");
         System.out.println("eg. find {details}");

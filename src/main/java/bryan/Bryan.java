@@ -32,6 +32,7 @@ public class Bryan {
                 String detail = parsedCommand.getDetail();
                 TaskList tasklist = new TaskList(commandText, detail, taskArray, storage);
                 tasklist.process();
+
             } catch (InvalidCommandException e) {
                 ui.printInvalidCommandException();
             } catch (EmptyTaskException e) {

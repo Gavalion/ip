@@ -34,6 +34,10 @@ public class Task {
         isDone = done;
     }
 
+    /**
+     * Convert task to txt format that includes the marking
+     * @return string of task in the txt format
+     */
     public String convertToTxtFormat() {
         return (this.isDone() ? "1" : "0") + " # " + this.description;
     }
